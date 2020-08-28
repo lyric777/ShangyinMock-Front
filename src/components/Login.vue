@@ -1,24 +1,37 @@
 <template>
   <div class="bg">
-    <a-form-model ref="ruleForm" :model="ruleForm" :rules="rules" v-bind="layout">
-      <a-form-model-item has-feedback label="Password" prop="pass">
-        <a-input v-model="ruleForm.pass" type="password" autocomplete="off" />
-      </a-form-model-item>
-      <a-form-model-item has-feedback label="Confirm" prop="checkPass">
-        <a-input v-model="ruleForm.checkPass" type="password" autocomplete="off" />
-      </a-form-model-item>
-      <a-form-model-item has-feedback label="Age" prop="age">
-        <a-input v-model.number="ruleForm.age" />
-      </a-form-model-item>
-      <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
-        <a-button type="primary" @click="submitForm('ruleForm')">
-          Submit
-        </a-button>
-        <a-button style="margin-left: 10px" @click="resetForm('ruleForm')">
-          Reset
-        </a-button>
-      </a-form-model-item>
-    </a-form-model>
+    <a-row>
+      <a-col :span="8">
+      </a-col>
+      <a-col :span="8">
+        <div class="header" style="margin: 40px">
+          <img src="../assets/logo.png" alt="logo" class="logo" />
+          <span class="title" style="margin-left: 20px">Shangyin Mock</span>
+        </div>
+          <a-form-model ref="ruleForm" :model="ruleForm" :rules="rules" v-bind="layout">
+            <a-form-model-item has-feedback prop="pass">
+              <a-input size="large" v-model="ruleForm.pass" autocomplete="off" placeholder="工号">
+                <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.75)" />
+              </a-input>
+            </a-form-model-item>
+            <a-form-model-item has-feedback prop="checkPass">
+              <a-input size="large" v-model="ruleForm.checkPass" type="password" autocomplete="off" placeholder="密码">
+                <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.75)" />
+              </a-input>
+            </a-form-model-item>
+            <a-form-model-item >
+              <a-button size="large" type="primary" @click="submitForm('ruleForm')" block>
+                登录
+              </a-button>
+              <a-button size="large" style="margin-top: 20px;background-color:mediumseagreen;color: white" @click="resetForm('ruleForm')" block>
+                重置
+              </a-button>
+            </a-form-model-item>
+          </a-form-model>
+      </a-col>
+      <a-col :span="8">
+      </a-col>
+    </a-row>
   </div>
 </template>
 
@@ -56,9 +69,9 @@ export default {
     }
     const validatePass2 = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('Please input the password again'))
-      } else if (value !== this.ruleForm.pass) {
-        callback(new Error("Two inputs don't match!"))
+        callback(new Error('请输入工号'))
+      } else if (value !== '') {
+        callback(new Error('请输入密码'))
       } else {
         callback()
       }
@@ -76,7 +89,7 @@ export default {
       },
       layout: {
         labelCol: { span: 4 },
-        wrapperCol: { span: 14 }
+        wrapperCol: { span: 22 }
       }
     }
   },
@@ -109,5 +122,13 @@ body{
   background-position: center center;
   width: 1366px;
   height: 657px;
+}
+.title{
+  font-size: 33px;
+  color: rgba(50,50,50,.95);
+  font-family: Myriad Pro,Helvetica Neue,Arial,Helvetica,sans-serif;
+  font-weight: 600;
+  position: relative;
+  top: 10px;
 }
 </style>
