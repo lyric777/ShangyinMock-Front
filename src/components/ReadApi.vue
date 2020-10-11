@@ -52,7 +52,7 @@
       <a-layout-sider width="200" style="background: #fff">
         <a-menu
           mode="inline"
-          :default-selected-keys="['upload_file']"
+          :default-selected-keys="['check_raw_data']"
           :default-open-keys="['analyse_API']"
           :style="{ height: '100%', borderRight: 0 }"
         >
@@ -78,29 +78,22 @@
       </a-layout-sider>
       <a-layout style="padding: 0 24px 24px">
         <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item>首页</a-breadcrumb-item>
-          <a-breadcrumb-item>上传接口文档</a-breadcrumb-item>
+          <a-breadcrumb-item>接口解析</a-breadcrumb-item>
+          <a-breadcrumb-item>查看接口</a-breadcrumb-item>
         </a-breadcrumb>
         <a-layout-content
           :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '515px' }"
         >
           <!--Content-->
-          <a-upload-dragger
-            name="file"
-            :multiple="true"
-            action="http://127.0.0.1:5000/upload"
-            @change="handleChange"
+          <a-table
+            :columns="columns"
+            :data-source="data"
+            :loading="loading"
+            @change="handleTableChange"
+            :customRow="click"
           >
-            <p class="ant-upload-drag-icon">
-              <a-icon type="inbox" />
-            </p>
-            <p class="ant-upload-text">
-              单击选择文件，或拖拽文件到此处
-            </p>
-            <p class="ant-upload-hint">
-              支持单个或多个文件上传。严格禁止上传非法数据。
-            </p>
-          </a-upload-dragger>
+            <template slot="name" slot-scope="name"> {{ name.first }} {{ name.last }} </template>
+          </a-table>
         </a-layout-content>
       </a-layout>
     </a-layout>
@@ -108,25 +101,90 @@
 </template>
 
 <script>
+import reqwest from 'reqwest'
+const columns = [
+  {
+    title: '接口名称',
+    dataIndex: 'api_name',
+    sorter: true,
+    width: '15%',
+    scopedSlots: { customRender: 'api_name' }
+  },
+  {
+    title: '接口中文名',
+    dataIndex: 'api_name_cn',
+    width: '15%',
+    scopedSlots: { customRender: 'api_name_cn' }
+  },
+  {
+    title: '所属系统',
+    dataIndex: 'api_sys',
+    width: '10%'
+  },
+  {
+    title: '上传时间',
+    dataIndex: 'upload_time',
+    width: '20%',
+    sorter: true
+  },
+  {
+    title: '包含字段',
+    dataIndex: 'fields',
+    ellipsis: true
+  }
+]
 export default {
-  name: 'Index',
+  name: 'ReadApi',
   data () {
     return {
-      collapsed: false
+      collapsed: false,
+      data: [],
+      pagination: {},
+      loading: false,
+      columns
     }
   },
+  mounted () {
+    this.fetch()
+  },
   methods: {
-    handleChange (info) {
-      const status = info.file.status
-      if (status !== 'uploading') {
-        console.log(info.file, info.fileList)
-        console.log(111111)
-      }
-      if (status === 'done') {
-        this.$message.success(`${info.file.name} 上传成功`)
-      } else if (status === 'error') {
-        console.log(this.$message)
-        this.$message.error(`${info.file.name} 上传失败`)
+    handleTableChange (pagination, filters, sorter) {
+      console.log(pagination)
+      const pager = { ...this.pagination }
+      pager.current = pagination.current
+      this.pagination = pager
+      this.fetch({
+        results: pagination.pageSize,
+        page: pagination.current,
+        sortField: sorter.field,
+        sortOrder: sorter.order,
+        ...filters
+      })
+    },
+    fetch (params = {}) {
+      console.log('params:', params)
+      this.loading = true
+      reqwest({
+        url: 'http://127.0.0.1:5000/get_api',
+        method: 'get',
+        data: {},
+        type: 'json'
+      }).then(data => {
+        console.log(data)
+        const pagination = { ...this.pagination }
+        pagination.total = 200
+        this.loading = false
+        this.data = data.results
+        this.pagination = pagination
+      })
+    },
+    click (record, index) {
+      return {
+        on: {
+          click: () => {
+            console.log(record, index)
+          }
+        }
       }
     }
   }

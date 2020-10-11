@@ -59,7 +59,7 @@ export default {
     }
     const validatePass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('Please input the password'))
+        callback(new Error('请输入工号'))
       } else {
         if (this.ruleForm.checkPass !== '') {
           this.$refs.ruleForm.validateField('checkPass')
@@ -69,8 +69,6 @@ export default {
     }
     const validatePass2 = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入工号'))
-      } else if (value !== '') {
         callback(new Error('请输入密码'))
       } else {
         callback()
@@ -97,7 +95,8 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert('submit!')
+          this.$router.push('/index')
+          // alert('submit!')
         } else {
           console.log('error submit!!')
           return false

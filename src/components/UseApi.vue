@@ -52,7 +52,7 @@
       <a-layout-sider width="200" style="background: #fff">
         <a-menu
           mode="inline"
-          :default-selected-keys="['upload_file']"
+          :default-selected-keys="['use_API']"
           :default-open-keys="['analyse_API']"
           :style="{ height: '100%', borderRight: 0 }"
         >
@@ -78,29 +78,14 @@
       </a-layout-sider>
       <a-layout style="padding: 0 24px 24px">
         <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item>首页</a-breadcrumb-item>
-          <a-breadcrumb-item>上传接口文档</a-breadcrumb-item>
+          <a-breadcrumb-item>接口解析</a-breadcrumb-item>
+          <a-breadcrumb-item>调用接口</a-breadcrumb-item>
         </a-breadcrumb>
         <a-layout-content
           :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '515px' }"
         >
           <!--Content-->
-          <a-upload-dragger
-            name="file"
-            :multiple="true"
-            action="http://127.0.0.1:5000/upload"
-            @change="handleChange"
-          >
-            <p class="ant-upload-drag-icon">
-              <a-icon type="inbox" />
-            </p>
-            <p class="ant-upload-text">
-              单击选择文件，或拖拽文件到此处
-            </p>
-            <p class="ant-upload-hint">
-              支持单个或多个文件上传。严格禁止上传非法数据。
-            </p>
-          </a-upload-dragger>
+
         </a-layout-content>
       </a-layout>
     </a-layout>
@@ -109,25 +94,10 @@
 
 <script>
 export default {
-  name: 'Index',
+  name: 'UseApi',
   data () {
     return {
       collapsed: false
-    }
-  },
-  methods: {
-    handleChange (info) {
-      const status = info.file.status
-      if (status !== 'uploading') {
-        console.log(info.file, info.fileList)
-        console.log(111111)
-      }
-      if (status === 'done') {
-        this.$message.success(`${info.file.name} 上传成功`)
-      } else if (status === 'error') {
-        console.log(this.$message)
-        this.$message.error(`${info.file.name} 上传失败`)
-      }
     }
   }
 }

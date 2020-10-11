@@ -3,6 +3,11 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '@/components/Login'
 import Index from '@/components/Index'
+import ReadApi from '@/components/ReadApi'
+import ReadResult from '@/components/ReadResult'
+import UseApi from '@/components/UseApi'
+import ReadApiDetail from '@/components/ReadApiDetail'
+import Api from '@/components/Api'
 
 Vue.use(VueRouter)
 
@@ -26,6 +31,31 @@ const routes = [
     path: '/index',
     name: 'Index',
     component: Index
+  },
+  {
+    path: '/readApi',
+    name: 'ReadApi',
+    component: ReadApi
+  },
+  {
+    path: '/readResult',
+    name: 'ReadResult',
+    component: ReadResult
+  },
+  {
+    path: '/useApi',
+    name: 'UseApi',
+    component: UseApi
+  },
+  {
+    path: '/readApi/:api',
+    name: 'ReadApiDetail',
+    component: ReadApiDetail
+  },
+  {
+    path: '/api/:api',
+    name: 'Api',
+    component: Api
   },
   {
     path: '/about',
