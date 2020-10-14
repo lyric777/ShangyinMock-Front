@@ -85,7 +85,16 @@
           :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '515px' }"
         >
           <!--Content-->
-
+          <a-table
+            :columns="columns"
+            :data-source="data"
+            :loading="loading"
+            @change="handleTableChange"
+          >
+            <template slot="operation" slot-scope="text">
+              <a @click="() => check(text)">查看解析生成枚举值</a>
+            </template>
+          </a-table>
         </a-layout-content>
       </a-layout>
     </a-layout>
@@ -93,11 +102,88 @@
 </template>
 
 <script>
+import reqwest from 'reqwest'
+const columns = [
+  {
+    title: '接口名称',
+    dataIndex: 'api_name',
+    sorter: true,
+    width: '15%',
+    scopedSlots: { customRender: 'api_name' }
+  },
+  {
+    title: '接口中文名',
+    dataIndex: 'api_name_cn',
+    width: '15%',
+    scopedSlots: { customRender: 'api_name_cn' }
+  },
+  {
+    title: '所属系统',
+    dataIndex: 'api_sys',
+    width: '10%'
+  },
+  {
+    title: '包含字段',
+    dataIndex: 'fields',
+    ellipsis: true
+  },
+  {
+    title: '操作',
+    dataIndex: 'operation',
+    scopedSlots: { customRender: 'operation' }
+  }
+]
 export default {
   name: 'ReadResult',
   data () {
     return {
-      collapsed: false
+      collapsed: false,
+      data: [],
+      pagination: {},
+      loading: false,
+      columns
+    }
+  },
+  mounted () {
+    this.fetch()
+  },
+  methods: {
+    handleTableChange (pagination, filters, sorter) {
+      console.log(pagination)
+      const pager = { ...this.pagination }
+      pager.current = pagination.current
+      this.pagination = pager
+      this.fetch({
+        results: pagination.pageSize,
+        page: pagination.current,
+        sortField: sorter.field,
+        sortOrder: sorter.order,
+        ...filters
+      })
+    },
+    fetch (params = {}) {
+      this.loading = true
+      reqwest({
+        url: 'http://127.0.0.1:5000/get_api_result_all',
+        method: 'get',
+        data: {},
+        type: 'json'
+      }).then(data => {
+        const pagination = { ...this.pagination }
+        pagination.total = 200
+        this.loading = false
+        this.data = data.results
+        this.pagination = pagination
+        console.log(data)
+      })
+    },
+    check (text) {
+      console.log(1111111)
+      console.log(text)
+      this.$router.push({
+        name: 'ReadResultDetail',
+        params: { api: '3266' }
+      })
     }
   }
 }

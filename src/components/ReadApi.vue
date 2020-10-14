@@ -165,7 +165,7 @@ export default {
       console.log('params:', params)
       this.loading = true
       reqwest({
-        url: 'http://127.0.0.1:5000/get_api',
+        url: 'http://127.0.0.1:5000/get_api_all',
         method: 'get',
         data: {},
         type: 'json'
@@ -182,7 +182,8 @@ export default {
       return {
         on: {
           click: () => {
-            console.log(record, index)
+            this.$router.push({ name: 'ReadApiDetail', params: { api: this.data[index].api_name } })
+            // console.log(record, index)
           }
         }
       }

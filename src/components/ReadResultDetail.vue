@@ -79,7 +79,7 @@
       <a-layout style="padding: 0 24px 24px">
         <a-breadcrumb style="margin: 16px 0">
           <a-breadcrumb-item>接口解析</a-breadcrumb-item>
-          <a-breadcrumb-item>查看接口</a-breadcrumb-item>
+          <a-breadcrumb-item>查看接口解析结果</a-breadcrumb-item>
           <a-breadcrumb-item>{{this.$route.params.api}}</a-breadcrumb-item>
         </a-breadcrumb>
         <a-layout-content
@@ -93,7 +93,6 @@
             :loading="loading"
             @change="handleTableChange"
           >
-            <template slot="name" slot-scope="name"> {{ name.first }} {{ name.last }} </template>
           </a-table>
         </a-layout-content>
       </a-layout>
@@ -109,11 +108,6 @@ const columns = [
     dataIndex: 'field',
     width: '10%',
     scopedSlots: { customRender: 'field' }
-  },
-  {
-    title: '别名字段码',
-    dataIndex: 'alias_field',
-    width: '10%'
   },
   {
     title: '字段中文名',
@@ -133,7 +127,7 @@ const columns = [
   {
     title: '列表值',
     dataIndex: 'options',
-    width: '13%'
+    width: '10%'
   },
   {
     title: '是否必输',
@@ -151,13 +145,13 @@ const columns = [
     width: '8%'
   },
   {
-    title: '描述',
-    dataIndex: 'description',
-    ellipsis: true
+    title: '生成的枚举值',
+    dataIndex: 'enumeration'
+    // ellipsis: true
   }
 ]
 export default {
-  name: 'ReadApiDetail',
+  name: 'ReadResultDetail',
   data () {
     return {
       collapsed: false,
@@ -191,15 +185,16 @@ export default {
       console.log('params:', params)
       this.loading = true
       reqwest({
-        url: 'http://127.0.0.1:5000/get_api',
+        url: 'http://127.0.0.1:5000/get_api_result',
         method: 'get',
         data: {},
         type: 'json'
       }).then(data => {
+        console.log(data)
         const pagination = { ...this.pagination }
         pagination.total = 200
         this.loading = false
-        this.trade_name_cn = data.trade_name_cn // 这边后端记得加上
+        this.trade_name_cn = data.trade_name_cn
         this.trade_id = data.trade_id
         this.business_category = data.business_category
         this.data = data.results

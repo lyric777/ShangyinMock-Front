@@ -8,6 +8,7 @@ import ReadResult from '@/components/ReadResult'
 import UseApi from '@/components/UseApi'
 import ReadApiDetail from '@/components/ReadApiDetail'
 import Api from '@/components/Api'
+import ReadResultDetail from '@/components/ReadResultDetail'
 
 Vue.use(VueRouter)
 
@@ -51,6 +52,11 @@ const routes = [
     path: '/readApi/:api',
     name: 'ReadApiDetail',
     component: ReadApiDetail
+  },
+  {
+    path: '/readResult/:api',
+    name: 'ReadResultDetail',
+    component: ReadResultDetail
   },
   {
     path: '/api/:api',
