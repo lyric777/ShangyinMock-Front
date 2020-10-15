@@ -52,7 +52,7 @@
       <a-layout-sider width="200" style="background: #fff">
         <a-menu
           mode="inline"
-          :default-selected-keys="['check_raw_data']"
+          :default-selected-keys="['check_result']"
           :default-open-keys="['analyse_API']"
           :style="{ height: '100%', borderRight: 0 }"
         >
